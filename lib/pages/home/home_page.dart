@@ -1,3 +1,4 @@
+import 'package:exercise_monitor/pages/calendar_report/calendar_report.dart';
 import 'package:exercise_monitor/pages/home/drawer_page.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("Gym Monitor")),
       drawer: const DrawerMenu(),
-      body: const CalendarWidget(),
+      body: const CalendarReportWidget(),
     );
   }
 }
