@@ -1,3 +1,5 @@
+import 'package:exercise_monitor/models/calendarReport.dart';
+import 'package:exercise_monitor/services/calendarReport.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -27,6 +29,7 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setCalendarReport(DateTime.now());
     // get data of the month
     // calculate the percentage exercise done
     // and list of todo exercise for the date
@@ -45,30 +48,28 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
           calendarFormat: _format,
           calendarBuilders: CalendarBuilders(
             defaultBuilder: (context, day, focusedDay) {
-              for (DateTime d in toHighlight) {
-                if (day.day == d.day &&
-                    day.month == d.month &&
-                    day.year == d.year) {
-                  return Container(
-                    child: Column(children: [
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        '${day.day}',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                      if (percentDone > 0.85)
-                        const Icon(Icons.sentiment_satisfied_outlined,
-                            color: Colors.green)
-                      else if (percentDone >= 0.4)
-                        const Icon(Icons.sentiment_neutral_outlined,
-                            color: Color.fromARGB(255, 235, 235, 81))
-                      else
-                        const Icon(Icons.sentiment_dissatisfied_outlined,
-                            color: Colors.red)
-                    ]),
-                  );
+              for (CalendarReport calReport in calendarReport) {
+                if (day.day == calReport.date.day &&
+                    day.month == calReport.date.month &&
+                    day.year == calReport.date.year) {
+                  return Column(children: [
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      '${day.day}',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    if (calReport.percentageDone > 85)
+                      const Icon(Icons.sentiment_satisfied_outlined,
+                          color: Colors.green)
+                    else if (calReport.percentageDone >= 40)
+                      const Icon(Icons.sentiment_neutral_outlined,
+                          color: Colors.yellow)
+                    else
+                      const Icon(Icons.sentiment_dissatisfied_outlined,
+                          color: Colors.red)
+                  ]);
                 }
               }
               return null;
