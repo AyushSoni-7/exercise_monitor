@@ -1,5 +1,4 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
-import 'package:exercise_monitor/pages/home/drawer_page.dart';
 import 'package:exercise_monitor/pages/muscle/muscle_group.dart';
 import 'package:exercise_monitor/pages/week_calendar/click_button.dart';
 import 'package:exercise_monitor/pages/week_calendar/to_do_exercise_list.dart';
@@ -29,12 +28,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   List<ScheduleExercise> todoExercise = filterByDate(DateTime.now());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Gym Monitor"),
-      ),
-      drawer: const DrawerMenu(),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           _addExerciseBar(),
           _addDatebar(),
@@ -56,7 +50,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                   style: subHeadingStyle,
                 )),
         ]),
-      ),
     );
   }
 
