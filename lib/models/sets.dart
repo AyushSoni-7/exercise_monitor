@@ -10,5 +10,3 @@ class Reps {
   int rep;
   Reps({required this.weight, required this.rep});
 }
-
-Map<String, Sets> weekSetsList = {};
