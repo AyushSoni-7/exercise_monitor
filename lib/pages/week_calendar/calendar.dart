@@ -85,8 +85,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         ),
         onDateChange: (date) {
           _selectedDate = date;
-          todoExercise.clear;
           setState(() {
+            todoExercise.clear;
             todoExercise = filterByDate(_selectedDate);
           });
         },

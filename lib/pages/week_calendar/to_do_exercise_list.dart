@@ -44,6 +44,13 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // starts here
+    exercise = getExerciseId(widget.schId.exercise_id);
+    isDone = widget.schId.done;
+    set = getSetsBySchId(widget.schId.id) ??
+        updateSet(widget.schId.id, defaultSet);
+    defaultSet = set!.nSet;
+    // ends here
     return Column(
       children: [
         Card(
