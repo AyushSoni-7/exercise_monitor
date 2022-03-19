@@ -87,6 +87,12 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
           selectedDayPredicate: (day) {
             return isSameDay(_selectedDay, day);
           },
+          onPageChanged: (focusedDay) {
+            setState(() {
+              _focusedDay = focusedDay;
+              setCalendarReport(_focusedDay);
+            });
+          },
         ),
         const SizedBox(
           height: 20,

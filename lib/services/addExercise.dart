@@ -8,6 +8,11 @@ int count = 0;
 
 List<ScheduleExercise> todoExercise = [
   ScheduleExercise(
+      id: "avgdscsddf",
+      exercise_id: "5",
+      date: DateTime(2022, 02, 16),
+      done: true),
+  ScheduleExercise(
       id: "avgdf",
       exercise_id: "1",
       date: DateTime.now().subtract(const Duration(days: 1)),
