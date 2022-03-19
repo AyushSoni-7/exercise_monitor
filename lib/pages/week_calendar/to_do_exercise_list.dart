@@ -1,6 +1,7 @@
 import 'package:exercise_monitor/models/sets.dart';
 import 'package:exercise_monitor/pages/exercise/reps.dart';
 import 'package:exercise_monitor/pages/exercise/sets.dart';
+import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
   @override
   void initState() {
     super.initState();
-    exercise = getExerciseId(widget.schId.exercise_id);
+    exercise = getExerciseById(widget.schId.exercise_id);
     isDone = widget.schId.done;
     set = getSetsBySchId(widget.schId.id) ??
         updateSet(widget.schId.id, defaultSet);
@@ -45,7 +46,7 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
   @override
   Widget build(BuildContext context) {
     // starts here
-    exercise = getExerciseId(widget.schId.exercise_id);
+    exercise = getExerciseById(widget.schId.exercise_id);
     isDone = widget.schId.done;
     set = getSetsBySchId(widget.schId.id) ??
         updateSet(widget.schId.id, defaultSet);

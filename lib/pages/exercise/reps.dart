@@ -1,4 +1,5 @@
 import 'package:exercise_monitor/models/sets.dart';
+import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/material.dart';
 
 class RepsWidget extends StatefulWidget {
