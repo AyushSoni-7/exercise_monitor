@@ -29,7 +29,7 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
   @override
   void initState() {
     super.initState();
-    exercise = getExerciseId(widget.schId.exercise_id);
+    exercise = getExerciseById(widget.schId.exercise_id);
     isDone = widget.schId.done;
     set = getSetsBySchId(widget.schId.id) ??
         updateSet(widget.schId.id, defaultSet);
@@ -46,7 +46,7 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
   @override
   Widget build(BuildContext context) {
     // starts here
-    exercise = getExerciseId(widget.schId.exercise_id);
+    exercise = getExerciseById(widget.schId.exercise_id);
     isDone = widget.schId.done;
     set = getSetsBySchId(widget.schId.id) ??
         updateSet(widget.schId.id, defaultSet);

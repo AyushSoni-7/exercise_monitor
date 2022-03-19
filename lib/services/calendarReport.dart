@@ -1,6 +1,8 @@
 import 'package:exercise_monitor/models/calendarReport.dart';
+import 'package:exercise_monitor/models/exercise.dart';
 import 'package:exercise_monitor/models/schedule.dart';
 import 'package:exercise_monitor/services/addExercise.dart';
+import 'package:exercise_monitor/services/exercise.dart';
 
 List<CalendarReport> calendarReport = [];
 
@@ -37,6 +39,14 @@ void setCalendarReport(DateTime date) {
   });
 }
 
-CalendarReport getReportByDate(DateTime date) {
-  return calendarReport.firstWhere((report) => report.date == date);
+List<CalendarExerciseReport> getExercisesReport(DateTime date) {
+  List<CalendarExerciseReport> calExerciseReport = [];
+  List<ScheduleExercise> schExercises = filterByDate(date);
+  for (ScheduleExercise schExercise in schExercises) {
+    Exercise exercise = getExerciseById(schExercise.exercise_id) as Exercise;
+    CalendarExerciseReport calExRepo =
+        CalendarExerciseReport(exercise: exercise, schExercise: schExercise);
+    calExerciseReport.add(calExRepo);
+  }
+  return calExerciseReport;
 }

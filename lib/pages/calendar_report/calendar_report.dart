@@ -1,5 +1,8 @@
 import 'package:exercise_monitor/models/calendarReport.dart';
+import 'package:exercise_monitor/models/exercise.dart';
+import 'package:exercise_monitor/services/addExercise.dart';
 import 'package:exercise_monitor/services/calendarReport.dart';
+import 'package:exercise_monitor/themes/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,23 +19,13 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
   late DateTime _selectedDay = DateTime.now();
   late DateTime _focusedDay = DateTime.now();
   late CalendarFormat _format = CalendarFormat.month;
-  double percentDone = 0.1;
-  List<DateTime> toHighlight = List<DateTime>.generate(
-      10,
-      (i) => DateTime.utc(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-          ).add(Duration(days: -i)));
+  late List<CalendarExerciseReport> calExerciseReport =
+      getExercisesReport(DateTime.now());
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setCalendarReport(DateTime.now());
-    // get data of the month
-    // calculate the percentage exercise done
-    // and list of todo exercise for the date
   }
 
   @override
@@ -83,6 +76,7 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDate;
+              calExerciseReport = getExercisesReport(focusedDate);
             });
           },
           onFormatChanged: (CalendarFormat format) {
@@ -97,17 +91,74 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
         const SizedBox(
           height: 20,
         ),
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.only(left: 30),
-            width: MediaQuery.of(context).size.width,
-            // height: MediaQuery.of(context).size.height*0.45,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
-                color: Color(0xff30384c)),
-            child: Text(_focusedDay.toString()),
+        Container(
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 5),
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.4514,
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+              color: Color(0xff30384c)),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(
+                  DateFormat("MMMM dd, yyyy").format(_selectedDay),
+                  style: headingStyle,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (todoExercise.isNotEmpty)
+                  ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: calExerciseReport.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Card(
+                        child: ListTile(
+                          leading: calExerciseReport[index].schExercise.done
+                              ? const Icon(
+                                  CupertinoIcons.check_mark_circled_solid,
+                                  color: Colors.green,
+                                )
+                              : const Icon(
+                                  CupertinoIcons.clear_circled_solid,
+                                  color: Colors.red,
+                                ),
+                          title: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.white,
+                                backgroundImage: AssetImage(
+                                    calExerciseReport[index]
+                                        .exercise
+                                        .imgSrc
+                                        .toString()),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                  calExerciseReport[index]
+                                      .exercise
+                                      .name
+                                      .toString(),
+                                  overflow: TextOverflow.ellipsis),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                else
+                  const Center(
+                      child: Text(
+                    "No Data Found",
+                  )),
+              ],
+            ),
           ),
         )
       ],

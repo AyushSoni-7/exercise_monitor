@@ -56,7 +56,7 @@ List<Exercise> getMuscleId(String id) {
   return exerciseList.where((element) => element.muscleId == id).toList();
 }
 
-Exercise? getExerciseId(String id) {
+Exercise? getExerciseById(String id) {
   if (exerciseList.isNotEmpty) {
     return exerciseList.firstWhere((element) => element.id == id);
   }
