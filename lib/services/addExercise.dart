@@ -92,3 +92,9 @@ ScheduleExercise objSchExercise(String exerciseId, DateTime date) {
   return ScheduleExercise(
       id: count.toString(), exerciseId: exerciseId, date: date);
 }
+
+void exerciseDone(String id) {
+  ScheduleExercise schExercise =
+      todoExercise.firstWhere((element) => element.id == id);
+  schExercise.done = true;
+}

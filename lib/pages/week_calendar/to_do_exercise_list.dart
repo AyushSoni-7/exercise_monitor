@@ -1,6 +1,7 @@
 import 'package:exercise_monitor/models/sets.dart';
 import 'package:exercise_monitor/pages/exercise/reps.dart';
 import 'package:exercise_monitor/pages/exercise/sets.dart';
+import 'package:exercise_monitor/services/addExercise.dart';
 import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -83,11 +84,15 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
                 onPressed: (() {
                   setState(() {
                     isDone = true;
+                    exerciseDone(widget.schId.id);
                   });
                 }),
-                icon: Icon(isDone
-                    ? CupertinoIcons.check_mark_circled_solid
-                    : CupertinoIcons.circle)),
+                icon: isDone
+                    ? const Icon(
+                        CupertinoIcons.check_mark_circled_solid,
+                        color: Colors.green,
+                      )
+                    : const Icon(CupertinoIcons.circle)),
           ),
         ),
         editSelect == true
