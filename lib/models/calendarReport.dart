@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'package:exercise_monitor/models/exercise.dart';
 import 'package:exercise_monitor/models/schedule.dart';
 

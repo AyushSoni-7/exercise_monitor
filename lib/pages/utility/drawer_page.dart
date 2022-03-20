@@ -22,8 +22,8 @@ class DrawerMenu extends StatelessWidget {
           leading: Icon(Metadata.drawerMenuIcons[index]),
           title: Text(Metadata.drawerMenu[index]),
           onTap: () {
-            // Update the state of the app.
-            // ...
+            Navigator.pushNamedAndRemoveUntil(
+                context, Metadata.routePath[index], (r) => false);
           },
         )
     ]));

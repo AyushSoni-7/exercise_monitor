@@ -43,7 +43,7 @@ List<CalendarExerciseReport> getExercisesReport(DateTime date) {
   List<CalendarExerciseReport> calExerciseReport = [];
   List<ScheduleExercise> schExercises = filterByDate(date);
   for (ScheduleExercise schExercise in schExercises) {
-    Exercise exercise = getExerciseById(schExercise.exercise_id) as Exercise;
+    Exercise exercise = getExerciseById(schExercise.exerciseId) as Exercise;
     CalendarExerciseReport calExRepo =
         CalendarExerciseReport(exercise: exercise, schExercise: schExercise);
     calExerciseReport.add(calExRepo);

@@ -1,4 +1,4 @@
-import 'package:exercise_monitor/pages/home/home_page.dart';
+import 'package:exercise_monitor/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      routes: customRoutes,
+      // home: const HomePage(),
     );
   }
 }

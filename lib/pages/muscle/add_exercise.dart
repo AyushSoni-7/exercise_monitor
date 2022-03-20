@@ -17,9 +17,11 @@ class AddExercise extends StatefulWidget {
 
 class _AddExerciseState extends State<AddExercise> {
   late bool isSelected;
+
   @override
   void initState() {
     // if (widget.date != null && widget.date.runtimeType == DateTime)
+    super.initState();
     isSelected =
         getExercise(widget.exercise.id, widget.date ?? DateTime.now()) != null
             ? true
