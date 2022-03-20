@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:exercise_monitor/models/statics.dart';
-import 'package:flutter/material.dart';
 
 List<SetRepStat> setRepStatData = [
   SetRepStat(date: DateTime(2022, 1, 10), weight: [7.5], reps: [10]),

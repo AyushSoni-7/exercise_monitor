@@ -2,7 +2,6 @@ import 'package:exercise_monitor/models/exercise.dart';
 import 'package:exercise_monitor/models/muscle.dart';
 import 'package:exercise_monitor/pages/muscle/add_exercise.dart';
 import 'package:exercise_monitor/services/exercise.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MuscleWidget extends StatefulWidget {

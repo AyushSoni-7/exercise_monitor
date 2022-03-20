@@ -1,5 +1,4 @@
 import 'package:exercise_monitor/models/calendarReport.dart';
-import 'package:exercise_monitor/models/exercise.dart';
 import 'package:exercise_monitor/services/addExercise.dart';
 import 'package:exercise_monitor/services/calendarReport.dart';
 import 'package:exercise_monitor/themes/theme.dart';
