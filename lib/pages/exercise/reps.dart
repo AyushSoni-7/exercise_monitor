@@ -3,7 +3,7 @@ import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/material.dart';
 
 class RepsWidget extends StatefulWidget {
-  String scheduleId;
+  int scheduleId;
   int index;
 
   RepsWidget({Key? key, required this.scheduleId, required this.index})

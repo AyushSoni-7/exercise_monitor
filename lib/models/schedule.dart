@@ -1,6 +1,6 @@
 class ScheduleExercise {
-  String id;
-  String exerciseId;
+  int id;
+  int exerciseId;
   DateTime date;
   bool done;
   ScheduleExercise(

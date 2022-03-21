@@ -7,61 +7,57 @@ int count = 0;
 
 List<ScheduleExercise> todoExercise = [
   ScheduleExercise(
-      id: "avgdscsddf",
-      exerciseId: "5",
-      date: DateTime(2022, 02, 16),
-      done: true),
+      id: 1000, exerciseId: 5, date: DateTime(2022, 02, 16), done: true),
   ScheduleExercise(
-      id: "avgdf",
-      exerciseId: "1",
+      id: 2000,
+      exerciseId: 1,
       date: DateTime.now().subtract(const Duration(days: 1)),
       done: true),
   ScheduleExercise(
-      id: "dasd",
-      exerciseId: "2",
+      id: 3000,
+      exerciseId: 2,
       date: DateTime.now().subtract(const Duration(days: 1)),
       done: false),
   ScheduleExercise(
-      id: "avgdf",
-      exerciseId: "3",
+      id: 4000,
+      exerciseId: 3,
       date: DateTime.now().subtract(const Duration(days: 2)),
       done: true),
   ScheduleExercise(
-      id: "etrger",
-      exerciseId: "4",
+      id: 4500,
+      exerciseId: 4,
       date: DateTime.now().subtract(const Duration(days: 2)),
       done: true),
   ScheduleExercise(
-      id: "wrwr",
-      exerciseId: "5",
+      id: 4700,
+      exerciseId: 5,
       date: DateTime.now().subtract(const Duration(days: 2)),
       done: true),
   ScheduleExercise(
-      id: "fwfwe",
-      exerciseId: "6",
+      id: 4800,
+      exerciseId: 6,
       date: DateTime.now().subtract(const Duration(days: 3)),
       done: true),
   ScheduleExercise(
-      id: "bbrde",
-      exerciseId: "1",
-      date: DateTime.now().subtract(const Duration(days: 3)),
-      done: false),
-  ScheduleExercise(
-      id: "ntnt",
-      exerciseId: "1",
+      id: 5000,
+      exerciseId: 1,
       date: DateTime.now().subtract(const Duration(days: 3)),
       done: false),
   ScheduleExercise(
-      id: "ebvwfb",
-      exerciseId: "1",
+      id: 5200,
+      exerciseId: 1,
+      date: DateTime.now().subtract(const Duration(days: 3)),
+      done: false),
+  ScheduleExercise(
+      id: 5400,
+      exerciseId: 1,
       date: DateTime.now().subtract(const Duration(days: 3)),
       done: false),
 ];
 
-String getRandString(int len) {
-  var random = Random.secure();
-  var values = List<int>.generate(len, (i) => random.nextInt(255));
-  return base64UrlEncode(values);
+int getRandString(int len) {
+  Random random = new Random();
+  return random.nextInt(10000);
 }
 
 void addExercise(ScheduleExercise exercise) {
@@ -82,18 +78,17 @@ int daysBetween(DateTime from, DateTime to) {
   return to.compareTo(from);
 }
 
-ScheduleExercise? getExercise(String exerciseId, DateTime date) {
+ScheduleExercise? getExercise(int exerciseId, DateTime date) {
   return todoExercise.firstWhereOrNull((element) =>
       element.exerciseId == exerciseId && daysBetween(date, element.date) == 0);
 }
 
-ScheduleExercise objSchExercise(String exerciseId, DateTime date) {
+ScheduleExercise objSchExercise(int exerciseId, DateTime date) {
   count += 1;
-  return ScheduleExercise(
-      id: count.toString(), exerciseId: exerciseId, date: date);
+  return ScheduleExercise(id: count, exerciseId: exerciseId, date: date);
 }
 
-void exerciseDone(String id) {
+void exerciseDone(int id) {
   ScheduleExercise schExercise =
       todoExercise.firstWhere((element) => element.id == id);
   schExercise.done = true;

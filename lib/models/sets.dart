@@ -1,5 +1,5 @@
 class Sets {
-  String scheduleId;
+  int scheduleId;
   int nSet;
   List<Reps> reps = [];
   Sets({required this.scheduleId, required this.nSet});

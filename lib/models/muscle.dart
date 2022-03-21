@@ -1,6 +1,5 @@
-
 class Muscle {
-  String id;
+  int id;
   String name;
   String imgSrc;
 

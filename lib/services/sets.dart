@@ -1,8 +1,8 @@
 import 'package:exercise_monitor/models/sets.dart';
 
-Map<String, Sets> weekSetsList = {};
+Map<int, Sets> weekSetsList = {};
 
-Sets? updateSet(String scheduleId, int nSet) {
+Sets? updateSet(int scheduleId, int nSet) {
   if (weekSetsList[scheduleId] != null) {
     weekSetsList[scheduleId]!.nSet = nSet;
   } else {
@@ -11,7 +11,7 @@ Sets? updateSet(String scheduleId, int nSet) {
   return weekSetsList[scheduleId];
 }
 
-void updateReps(String scheduleId, int index, double weight, int rep) {
+void updateReps(int scheduleId, int index, double weight, int rep) {
   if (weekSetsList[scheduleId] != null &&
       index < weekSetsList[scheduleId]!.reps.length) {
     weekSetsList[scheduleId]!.reps[index].rep = rep;
@@ -27,11 +27,11 @@ void updateReps(String scheduleId, int index, double weight, int rep) {
   }
 }
 
-Sets? getSetsBySchId(String schId) {
+Sets? getSetsBySchId(int schId) {
   return weekSetsList[schId];
 }
 
-Reps getRep(String schID, int index) {
+Reps getRep(int schID, int index) {
   Sets? set = weekSetsList[schID];
   if (set != null && index < set.reps.length) {
     return set.reps[index];
