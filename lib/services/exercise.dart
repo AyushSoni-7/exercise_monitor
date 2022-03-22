@@ -60,9 +60,13 @@ Future<List<Exercise>> getByMuscleId(int id) async {
   // return exerciseList.where((element) => element.muscleId == id).toList();
 }
 
-Exercise? getExerciseById(int id) {
-  if (exerciseList.isNotEmpty) {
-    return exerciseList.firstWhere((element) => element.id == id);
+Future<Exercise?> getExerciseById(int id) async {
+  List<Map<String, dynamic>>? exerciseList =
+      await ExerciseDB.queryByExerciseID(id);
+  Exercise exercise;
+  if (exerciseList!.isNotEmpty) {
+    exercise = Exercise.fromJson(exerciseList[0]);
+    return exercise;
   }
   return null;
 }

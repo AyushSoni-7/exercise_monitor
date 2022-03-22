@@ -20,11 +20,16 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
   late DateTime _selectedDay = DateTime.now();
   late DateTime _focusedDay = DateTime.now();
   late CalendarFormat _format = CalendarFormat.month;
-  late List<CalendarExerciseReport> calExerciseReport =
-      getExercisesReport(DateTime.now());
+  List<CalendarExerciseReport>? calExerciseReport;
+
+  getCalExerciseReport(DateTime date) async {
+    getExercisesReport(DateTime.now())
+        .then((value) => calExerciseReport = value);
+  }
 
   @override
   void initState() {
+    getCalExerciseReport(DateTime.now());
     super.initState();
     setCalendarReport(DateTime.now());
   }
@@ -80,7 +85,8 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
               setState(() {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDate;
-                calExerciseReport = getExercisesReport(focusedDate);
+                getCalExerciseReport(focusedDate);
+                // calExerciseReport =  getExercisesReport(focusedDate);
               });
             },
             onFormatChanged: (CalendarFormat format) {
@@ -120,16 +126,16 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
                   const SizedBox(
                     height: 10,
                   ),
-                  if (todoExercise.isNotEmpty)
+                  if (todoExercise.isNotEmpty && calExerciseReport != null)
                     ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: calExerciseReport.length,
+                      itemCount: calExerciseReport!.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Card(
                           child: ListTile(
-                            leading: calExerciseReport[index].schExercise.done
+                            leading: calExerciseReport![index].schExercise.done
                                 ? const Icon(
                                     CupertinoIcons.check_mark_circled_solid,
                                     color: Colors.green,
@@ -143,7 +149,7 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
                                 CircleAvatar(
                                   backgroundColor: Colors.white,
                                   backgroundImage: AssetImage(
-                                      calExerciseReport[index]
+                                      calExerciseReport![index]
                                           .exercise
                                           .imgSrc
                                           .toString()),
@@ -152,7 +158,7 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
                                   width: 10,
                                 ),
                                 Text(
-                                    calExerciseReport[index]
+                                    calExerciseReport![index]
                                         .exercise
                                         .name
                                         .toString(),

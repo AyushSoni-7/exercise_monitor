@@ -1,6 +1,8 @@
 import 'package:exercise_monitor/models/sets.dart';
 import 'package:exercise_monitor/pages/exercise/reps.dart';
 import 'package:exercise_monitor/pages/exercise/sets.dart';
+import 'package:exercise_monitor/pages/utility/loader.dart';
+import 'package:exercise_monitor/pages/week_calendar/card_title.dart';
 import 'package:exercise_monitor/services/addExercise.dart';
 import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,7 +32,6 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
   @override
   void initState() {
     super.initState();
-    exercise = getExerciseById(widget.schId.exerciseId);
     isDone = widget.schId.done;
     set = getSetsBySchId(widget.schId.id) ??
         updateSet(widget.schId.id, defaultSet);
@@ -46,8 +47,6 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // starts here
-    exercise = getExerciseById(widget.schId.exerciseId);
     isDone = widget.schId.done;
     set = getSetsBySchId(widget.schId.id) ??
         updateSet(widget.schId.id, defaultSet);
@@ -67,18 +66,8 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
                     })
                   }),
             ),
-            title: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage(exercise!.imgSrc.toString()),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(exercise!.name.toString(),
-                    overflow: TextOverflow.ellipsis),
-              ],
+            title: CardTitleWeekCalendar(
+              schId: widget.schId,
             ),
             trailing: IconButton(
                 onPressed: (() {

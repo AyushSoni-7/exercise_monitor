@@ -39,11 +39,13 @@ void setCalendarReport(DateTime date) {
   });
 }
 
-List<CalendarExerciseReport> getExercisesReport(DateTime date) {
+Future<List<CalendarExerciseReport>> getExercisesReport(DateTime date) async {
   List<CalendarExerciseReport> calExerciseReport = [];
   List<ScheduleExercise> schExercises = filterByDate(date);
   for (ScheduleExercise schExercise in schExercises) {
-    Exercise exercise = getExerciseById(schExercise.exerciseId) as Exercise;
+    Exercise exercise =
+        await getExerciseById(schExercise.exerciseId) as Exercise;
+
     CalendarExerciseReport calExRepo =
         CalendarExerciseReport(exercise: exercise, schExercise: schExercise);
     calExerciseReport.add(calExRepo);
