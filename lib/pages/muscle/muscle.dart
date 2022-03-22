@@ -17,7 +17,7 @@ class MuscleWidget extends StatefulWidget {
 class _MuscleWidgetState extends State<MuscleWidget> {
   @override
   Widget build(BuildContext context) {
-    List<Exercise> exercises = getMuscleId(widget.muscle.id);
+    List<Exercise> exercises = getMuscleId(widget.muscle.id as int);
     return Scaffold(
       appBar: AppBar(),
       body: ListView.builder(

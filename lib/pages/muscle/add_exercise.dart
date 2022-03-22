@@ -50,7 +50,8 @@ class _AddExerciseState extends State<AddExercise> {
                   });
 
                   if (widget.date != null &&
-                      widget.date.runtimeType == DateTime) {
+                      widget.date.runtimeType == DateTime &&
+                      exercise.id != null) {
                     ScheduleExercise schExercise = objSchExercise(
                       exercise.id,
                       widget.date ?? DateTime.now(),

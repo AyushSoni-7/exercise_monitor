@@ -1,12 +1,20 @@
 import 'package:exercise_monitor/models/sets.dart';
+import 'dart:math';
+import 'dart:convert';
 
 Map<int, Sets> weekSetsList = {};
+
+int getRandInt(int len) {
+  Random random = new Random();
+  return random.nextInt(10000);
+}
 
 Sets? updateSet(int scheduleId, int nSet) {
   if (weekSetsList[scheduleId] != null) {
     weekSetsList[scheduleId]!.nSet = nSet;
   } else {
-    weekSetsList[scheduleId] = Sets(scheduleId: scheduleId, nSet: nSet);
+    weekSetsList[scheduleId] =
+        Sets(id: getRandInt(5), scheduleId: scheduleId, nSet: nSet);
   }
   return weekSetsList[scheduleId];
 }

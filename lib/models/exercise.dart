@@ -11,6 +11,23 @@ class Exercise {
       required this.name,
       required this.imgSrc,
       required this.muscleId});
+
+  factory Exercise.fromJson(Map<String, dynamic> json) {
+    return Exercise(
+        id: json["_id"],
+        name: json["name"],
+        imgSrc: json["imgSrc"],
+        muscleId: json["muscleId"]);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["_id"] = id;
+    data["name"] = name;
+    data["imgSrc"] = imgSrc;
+    data["muscleId"] = muscleId;
+    return data;
+  }
 }
 
 class ExerciseFields {

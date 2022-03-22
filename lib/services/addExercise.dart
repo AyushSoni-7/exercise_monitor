@@ -55,13 +55,13 @@ List<ScheduleExercise> todoExercise = [
       done: false),
 ];
 
-int getRandString(int len) {
+int getRandInt(int len) {
   Random random = new Random();
   return random.nextInt(10000);
 }
 
 void addExercise(ScheduleExercise exercise) {
-  exercise.id = getRandString(5);
+  exercise.id = getRandInt(5);
   todoExercise.add(exercise);
 }
 

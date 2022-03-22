@@ -1,3 +1,4 @@
+import 'package:exercise_monitor/db/muscle.dart';
 import '../models/muscle.dart';
 
 List<Muscle> muscleGroup = [
@@ -10,6 +11,12 @@ List<Muscle> muscleGroup = [
   Muscle(id: 2, name: "Legs", imgSrc: "assets/images/front.jpg"),
 ];
 
-List<Muscle> getMuscle() {
-  return muscleGroup;
+Future<List<Muscle>> getMuscleGroup() async {
+  // return muscleGroup;
+  List<Muscle> muscleGroupData = [];
+  List<Map<String, dynamic>>? muscleData = await MuscleDB.queryAll();
+  for (var muscle in muscleData!) {
+    muscleGroupData.add(Muscle.fromJson(muscle));
+  }
+  return muscleGroupData;
 }
