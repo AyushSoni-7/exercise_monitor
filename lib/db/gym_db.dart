@@ -1,9 +1,5 @@
 import 'dart:io';
 import 'package:exercise_monitor/db/create_table.dart';
-import 'package:exercise_monitor/models/exercise.dart';
-import 'package:exercise_monitor/models/muscle.dart';
-import 'package:exercise_monitor/models/schedule.dart';
-import 'package:exercise_monitor/models/sets.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';

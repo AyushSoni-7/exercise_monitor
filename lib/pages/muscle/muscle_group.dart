@@ -11,10 +11,9 @@ class MuscleGroup extends StatelessWidget {
 
   late List<Muscle> muscles = [];
   // getMuscleGroup();
-  Future<void> getMuscleFromDB() {
-    getMuscleGroup().then((value) => muscles = value);
-    return new Future.delayed(
-        const Duration(seconds: 5), () => print('waiting'));
+  Future<dynamic> getMuscleFromDB() async {
+    var response = await getMuscleGroup().then((value) => muscles = value);
+    return response;
   }
 
   @override
@@ -28,53 +27,56 @@ class MuscleGroup extends StatelessWidget {
       ),
       body: FutureBuilder(
           future: getMuscleFromDB(),
-          builder: (context, data) {
-            return muscles.isNotEmpty
-                ? GridView.count(
-                    padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
-                    crossAxisCount: 2,
-                    children: <Widget>[
-                      for (var muscle in muscles)
-                        InkWell(
-                          onTap: () {
-                            // to get navigated to specific muscle group
-                            // Navigator.pushNamed(context, routeName)
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MuscleWidget(
-                                        muscle: muscle, date: date)));
-                          },
-                          child: Card(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(muscle.imgSrc.toString()),
-                                  fit: BoxFit.fitHeight,
-                                  alignment: Alignment.topCenter,
-                                ),
-                              ),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                widthFactor: 4,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    muscle.name.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        letterSpacing: 1,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
+          builder: (BuildContext context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Loader();
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            return GridView.count(
+              padding: const EdgeInsets.fromLTRB(10, 30, 10, 10),
+              crossAxisCount: 2,
+              children: <Widget>[
+                for (var muscle in muscles)
+                  InkWell(
+                    onTap: () {
+                      // to get navigated to specific muscle group
+                      // Navigator.pushNamed(context, routeName)
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MuscleWidget(muscle: muscle, date: date)));
+                    },
+                    child: Card(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(muscle.imgSrc.toString()),
+                            fit: BoxFit.fitHeight,
+                            alignment: Alignment.topCenter,
+                          ),
+                        ),
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          widthFactor: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              muscle.name.toString(),
+                              style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  letterSpacing: 1,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
-                    ],
-                  )
-                : const Loader();
+                      ),
+                    ),
+                  ),
+              ],
+            );
           }),
     );
   }

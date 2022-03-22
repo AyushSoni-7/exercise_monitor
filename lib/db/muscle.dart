@@ -10,6 +10,12 @@ mixin MuscleDB implements GymDB {
     return await db?.query(_tableName);
   }
 
+  static Future<List<Map<String, dynamic>>?> queryByName(String name) async {
+    Database? db = await GymDB.instance.database;
+    return await db?.query(_tableName,
+        where: '${MuscleFields.name} = ?', whereArgs: [name]);
+  }
+
   static Future<int?> insert(Map<String, dynamic> row) async {
     Database? db = await GymDB.instance.database;
     return await db?.insert(_tableName, row);

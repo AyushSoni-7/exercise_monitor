@@ -1,11 +1,11 @@
 const String muscleTable = "muscle";
 
 class Muscle {
-  final int? id;
+  int id;
   String name;
   String imgSrc;
 
-  Muscle({this.id, required this.name, required this.imgSrc});
+  Muscle({required this.id, required this.name, required this.imgSrc});
 
   factory Muscle.fromJson(Map<String, dynamic> json) {
     return Muscle(id: json["_id"], name: json["name"], imgSrc: json["imgSrc"]);
