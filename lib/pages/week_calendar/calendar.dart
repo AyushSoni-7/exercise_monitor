@@ -2,6 +2,7 @@ import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:exercise_monitor/pages/muscle/muscle_group.dart';
 import 'package:exercise_monitor/pages/utility/app_bar.dart';
 import 'package:exercise_monitor/pages/utility/drawer_page.dart';
+import 'package:exercise_monitor/pages/utility/loader.dart';
 import 'package:exercise_monitor/pages/week_calendar/click_button.dart';
 import 'package:exercise_monitor/pages/week_calendar/to_do_exercise_list.dart';
 import 'package:exercise_monitor/themes/theme.dart';
@@ -20,14 +21,21 @@ class CalendarWidget extends StatefulWidget {
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
+  List<ScheduleExercise> todoExercise = [];
   @override
   void initState() {
+    getToDoExercise(DateTime.now());
     //refresh the page here
     super.initState();
   }
 
+  Future<List<ScheduleExercise>> getToDoExercise(DateTime date) async {
+    return getSchExerciseByDate(DateTime.now())
+        .then((value) => todoExercise = value);
+  }
+
   DateTime _selectedDate = DateTime.now();
-  List<ScheduleExercise> todoExercise = filterByDate(DateTime.now());
+  // List<ScheduleExercise> todoExercise = getSchExerciseByDate(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,16 +46,26 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           _addExerciseBar(),
           _addDatebar(),
           todoExercise.isNotEmpty
-              ? ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: todoExercise.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
-                      child: ToDoExerciseListWidget(schId: todoExercise[index]),
-                    );
+              ? FutureBuilder(
+                  future: getToDoExercise(_selectedDate),
+                  builder: (BuildContext context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: todoExercise.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+                              child: ToDoExerciseListWidget(
+                                  schId: todoExercise[index]),
+                            );
+                          });
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    return const Loader();
                   })
               : Center(
                   child: Text(
@@ -86,7 +104,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           _selectedDate = date;
           setState(() {
             todoExercise.clear;
-            todoExercise = filterByDate(_selectedDate);
+            getToDoExercise(_selectedDate);
+            // todoExercise = getSchExerciseByDate(_selectedDate);
           });
         },
       ),
@@ -122,7 +141,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                   date: _selectedDate,
                                 ))),
                     setState(() {
-                      todoExercise = filterByDate(_selectedDate);
+                      todoExercise.clear;
+                      getToDoExercise(_selectedDate);
+                      // todoExercise = getSchExerciseByDate(_selectedDate);
                     })
                   }),
         ],

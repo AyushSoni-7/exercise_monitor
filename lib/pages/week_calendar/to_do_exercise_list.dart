@@ -1,6 +1,7 @@
 import 'package:exercise_monitor/models/sets.dart';
 import 'package:exercise_monitor/pages/exercise/reps.dart';
 import 'package:exercise_monitor/pages/exercise/sets.dart';
+import 'package:exercise_monitor/pages/exercise/sets_reps.dart';
 import 'package:exercise_monitor/pages/utility/loader.dart';
 import 'package:exercise_monitor/pages/week_calendar/card_title.dart';
 import 'package:exercise_monitor/services/addExercise.dart';
@@ -85,27 +86,28 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
           ),
         ),
         editSelect == true
-            ? SingleChildScrollView(
-                child: Card(
-                  elevation: 0,
-                  margin: const EdgeInsets.only(
-                      top: 2, left: 40, bottom: 10, right: 0),
-                  child: ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SetsWidget(
-                          returnSet: getSets,
-                          defaultSet: defaultSet,
-                        ),
-                        for (int i = 0; i < set!.nSet; i++)
-                          RepsWidget(scheduleId: set!.scheduleId, index: i),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : const SizedBox(width: 0.0, height: 0.0),
+            ? SetsRepsWidget(schId: widget.schId)
+            // SingleChildScrollView(
+            //     child: Card(
+            //       elevation: 0,
+            //       margin: const EdgeInsets.only(
+            //           top: 2, left: 40, bottom: 10, right: 0),
+            //       child: ListTile(
+            //         title: Column(
+            //           crossAxisAlignment: CrossAxisAlignment.stretch,
+            //           children: [
+            //             SetsWidget(
+            //               returnSet: getSets,
+            //               defaultSet: defaultSet,
+            //             ),
+            //             for (int i = 0; i < set!.nSet; i++)
+            //               RepsWidget(scheduleId: set!.scheduleId, index: i),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   )
+            : const SizedBox.shrink(),
       ],
     );
   }

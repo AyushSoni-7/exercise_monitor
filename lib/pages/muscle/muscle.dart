@@ -40,6 +40,7 @@ class _MuscleWidgetState extends State<MuscleWidget> {
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+                      // child: Text("Hello"),
                       child: AddExercise(
                         exercise: exercises[index],
                         date: widget.date,

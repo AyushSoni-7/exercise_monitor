@@ -8,7 +8,7 @@ import 'package:sqflite/sqflite.dart';
 Future createTable(Database db, int version) async {
   const _idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
   const _textType = "TEXT NOT NULL";
-  const _boolType = "BOOLEAN NOT NULL";
+  // const _boolType = "BOOLEAN NOT NULL";
   const _intType = "INTEGER NOT NULL";
   const _doubleType = "NUMERIC NOT NULL";
   // Muscle table
@@ -36,7 +36,7 @@ Future createTable(Database db, int version) async {
         ${ScheduleExerciseFields.id} $_idType,
         ${ScheduleExerciseFields.exerciseId} $_intType,
         ${ScheduleExerciseFields.date} $_intType,
-        ${ScheduleExerciseFields.done} $_boolType
+        ${ScheduleExerciseFields.done} $_intType
       )
       ''');
 

@@ -41,7 +41,7 @@ void setCalendarReport(DateTime date) {
 
 Future<List<CalendarExerciseReport>> getExercisesReport(DateTime date) async {
   List<CalendarExerciseReport> calExerciseReport = [];
-  List<ScheduleExercise> schExercises = filterByDate(date);
+  List<ScheduleExercise> schExercises = await getSchExerciseByDate(date);
   for (ScheduleExercise schExercise in schExercises) {
     Exercise exercise =
         await getExerciseById(schExercise.exerciseId) as Exercise;

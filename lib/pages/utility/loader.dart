@@ -13,3 +13,13 @@ class Loader extends StatelessWidget {
     );
   }
 }
+
+class LoaderWithoutCenter extends StatelessWidget {
+  const LoaderWithoutCenter({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const SpinKitWave(
+        color: Color.fromARGB(255, 68, 109, 197), type: SpinKitWaveType.start);
+  }
+}

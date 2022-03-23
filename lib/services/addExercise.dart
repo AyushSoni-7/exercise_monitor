@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:convert';
 import 'package:collection/collection.dart';
+import 'package:exercise_monitor/db/schedule.dart';
 import '../models/schedule.dart';
 
 int count = 0;
@@ -55,37 +56,35 @@ List<ScheduleExercise> todoExercise = [
       done: false),
 ];
 
-int getRandInt(int len) {
-  Random random = new Random();
-  return random.nextInt(10000);
+Future<int?> addSchExercise(Map<String, dynamic> exercise) {
+  return SchExerciseDB.insert(exercise);
 }
 
-void addExercise(ScheduleExercise exercise) {
-  exercise.id = getRandInt(5);
-  todoExercise.add(exercise);
+Future<List<ScheduleExercise>> getSchExerciseByDate(DateTime date) async {
+  int filterDate =
+      DateTime(date.year, date.month, date.day).microsecondsSinceEpoch;
+  List<Map<String, dynamic>>? schExerciseJson =
+      await SchExerciseDB.queryByDate(filterDate);
+  List<ScheduleExercise> schExercise = [];
+  for (var exercise in schExerciseJson!) {
+    schExercise.add(ScheduleExercise.fromJson(exercise));
+  }
+  return Future.value(schExercise);
 }
 
-List<ScheduleExercise> filterByDate(DateTime date) {
-  return todoExercise
-      .where((element) => daysBetween(date, element.date) == 0)
-      .toList();
-}
-
-int daysBetween(DateTime from, DateTime to) {
-  from = DateTime(from.year, from.month, from.day);
-  to = DateTime(to.year, to.month, to.day);
-
-  return to.compareTo(from);
-}
-
-ScheduleExercise? getExercise(int exerciseId, DateTime date) {
-  return todoExercise.firstWhereOrNull((element) =>
-      element.exerciseId == exerciseId && daysBetween(date, element.date) == 0);
-}
-
-ScheduleExercise objSchExercise(int exerciseId, DateTime date) {
-  count += 1;
-  return ScheduleExercise(id: count, exerciseId: exerciseId, date: date);
+Future<ScheduleExercise?> getSchExerciseByDateExerID(
+    int exerciseId, DateTime date) async {
+  int filterDate =
+      DateTime(date.year, date.month, date.day).microsecondsSinceEpoch;
+  List<Map<String, dynamic>>? schExerciseList =
+      await SchExerciseDB.queryByDateExID(exerciseId, filterDate);
+  ScheduleExercise? schExercise;
+  if (schExerciseList == null || schExerciseList.isEmpty) {
+    return Future.value(null);
+  }
+  Map<String, dynamic> schExerMap = schExerciseList.elementAt(0);
+  schExercise = ScheduleExercise.fromJson(schExerMap);
+  return Future.value(schExercise);
 }
 
 void exerciseDone(int id) {

@@ -16,15 +16,16 @@ class ScheduleExercise {
         id: json["_id"],
         exerciseId: json["exerciseId"],
         date: DateTime.fromMicrosecondsSinceEpoch(json["date"]),
-        done: json["done"]);
+        done: json["done"] == 1 ? true : false);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["_id"] = id;
     data["exerciseId"] = exerciseId;
-    data["date"] = date.microsecondsSinceEpoch;
-    data["done"] = done;
+    data["date"] =
+        DateTime(date.year, date.month, date.day).microsecondsSinceEpoch;
+    data["done"] = done ? 1 : 0;
     return data;
   }
 }
