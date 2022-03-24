@@ -43,6 +43,10 @@ class _RepsWidgetState extends State<RepsWidget> {
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.05,
           ),
+          Text("Set " + (widget.index + 1).toString()),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.05,
+          ),
           Flexible(
             child: TextField(
               autocorrect: true,

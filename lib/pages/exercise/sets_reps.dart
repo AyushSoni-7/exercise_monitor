@@ -73,8 +73,7 @@ class _SetsRepsWidgetState extends State<SetsRepsWidget> {
                     returnSet: getSets,
                     defaultSet: set.reps.length,
                   ),
-                  Container(
-                    // color: Colors.redAccent,
+                  SizedBox(
                     height: MediaQuery.of(context).size.height * 0.24,
                     child: MediaQuery.removePadding(
                       context: context,
