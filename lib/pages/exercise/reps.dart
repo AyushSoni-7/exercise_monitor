@@ -84,7 +84,6 @@ class _RepsWidgetState extends State<RepsWidget> {
                 setState(
                   () => {},
                 ),
-                // widget.weights = double.parse(value)
               },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
