@@ -30,7 +30,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   getToDoExercise(DateTime date) async {
-    Future.delayed(Duration(seconds: 2));
     return await getSchExerciseByDate(date)
         .then((value) => todoExercise = value);
   }

@@ -150,8 +150,7 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
                           const SizedBox(
                             height: 10,
                           ),
-                          if (todoExercise.isNotEmpty &&
-                              calExerciseReport != null)
+                          if (calExerciseReport != null)
                             ListView.builder(
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
