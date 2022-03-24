@@ -1,12 +1,12 @@
 import 'package:exercise_monitor/models/sets.dart';
-import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/material.dart';
 
 class RepsWidget extends StatefulWidget {
-  String scheduleId;
+  Sets set;
   int index;
+  final returnRep;
 
-  RepsWidget({Key? key, required this.scheduleId, required this.index})
+  RepsWidget({Key? key, required this.set, required this.index, this.returnRep})
       : super(key: key);
 
   @override
@@ -16,19 +16,21 @@ class RepsWidget extends StatefulWidget {
 class _RepsWidgetState extends State<RepsWidget> {
   late TextEditingController _weight;
   late TextEditingController _reps;
+  late Reps rep;
 
   @override
   void initState() {
-    super.initState();
-
-    Reps rep = getRep(widget.scheduleId, widget.index);
+    rep = widget.set.reps.elementAt(widget.index);
     _weight = TextEditingController(text: rep.weight.toString());
     _reps = TextEditingController(text: rep.rep.toString());
+    super.initState();
   }
 
+  // ${SetTableFields.weight} $_doubleType
   void update() {
-    updateReps(widget.scheduleId, widget.index,
-        double.tryParse(_weight.text) ?? 0.0, int.tryParse(_reps.text) ?? 0);
+    rep.rep = int.tryParse(_reps.text) ?? 0;
+    rep.weight = int.tryParse(_weight.text) ?? 0;
+    widget.returnRep(rep, widget.index);
   }
 
   @override
@@ -51,7 +53,6 @@ class _RepsWidgetState extends State<RepsWidget> {
                   () => {},
                 ),
                 update()
-                // widget.weights = double.parse(value)
               },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),

@@ -1,6 +1,8 @@
+const String schExerciseTable = "scheduleExercise";
+
 class ScheduleExercise {
-  String id;
-  String exerciseId;
+  int id;
+  int exerciseId;
   DateTime date;
   bool done;
   ScheduleExercise(
@@ -11,17 +13,26 @@ class ScheduleExercise {
 
   factory ScheduleExercise.fromJson(Map<String, dynamic> json) {
     return ScheduleExercise(
-        id: json["id"],
-        exerciseId: json['exerciseId'],
-        date: json["date"],
-        done: json["select"]);
+        id: json["_id"],
+        exerciseId: json["exerciseId"],
+        date: DateTime.fromMicrosecondsSinceEpoch(json["date"]),
+        done: json["done"] == 1 ? true : false);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data["_id"] = id;
     data["exerciseId"] = exerciseId;
-    data["date"] = date;
-    data["select"] = done;
+    data["date"] =
+        DateTime(date.year, date.month, date.day).microsecondsSinceEpoch;
+    data["done"] = done ? 1 : 0;
     return data;
   }
+}
+
+class ScheduleExerciseFields {
+  static const String id = "_id";
+  static const String exerciseId = "exerciseId";
+  static const String date = "date";
+  static const String done = "done";
 }

@@ -1,6 +1,8 @@
 import 'package:exercise_monitor/models/sets.dart';
-import 'package:exercise_monitor/pages/exercise/reps.dart';
-import 'package:exercise_monitor/pages/exercise/sets.dart';
+
+import 'package:exercise_monitor/pages/exercise/sets_reps.dart';
+import 'package:exercise_monitor/pages/utility/loader.dart';
+import 'package:exercise_monitor/pages/week_calendar/card_title.dart';
 import 'package:exercise_monitor/services/addExercise.dart';
 import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +10,6 @@ import 'package:flutter/material.dart';
 
 import '../../models/exercise.dart';
 import '../../models/schedule.dart';
-import '../../services/exercise.dart';
 
 class ToDoExerciseListWidget extends StatefulWidget {
   final ScheduleExercise schId;
@@ -23,36 +24,21 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
   late Exercise? exercise;
   bool isDone = false;
   bool editSelect = false;
-  int defaultSet = 0;
-  // late int nset;
-  late Sets? set;
+  late Sets set;
 
   @override
   void initState() {
     super.initState();
-    exercise = getExerciseById(widget.schId.exerciseId);
     isDone = widget.schId.done;
-    set = getSetsBySchId(widget.schId.id) ??
-        updateSet(widget.schId.id, defaultSet);
-    defaultSet = set!.nSet;
   }
 
-  void getSets(int value) {
-    setState(() {
-      set = updateSet(widget.schId.id, value);
-    });
-    defaultSet = set!.nSet;
+  getSetByID() async {
+    return await getSetBySchId(widget.schId.id).then((value) => set = value);
   }
 
   @override
   Widget build(BuildContext context) {
-    // starts here
-    exercise = getExerciseById(widget.schId.exerciseId);
     isDone = widget.schId.done;
-    set = getSetsBySchId(widget.schId.id) ??
-        updateSet(widget.schId.id, defaultSet);
-    defaultSet = set!.nSet;
-    // ends here
     return Column(
       children: [
         Card(
@@ -67,24 +53,14 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
                     })
                   }),
             ),
-            title: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  backgroundImage: AssetImage(exercise!.imgSrc.toString()),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(exercise!.name.toString(),
-                    overflow: TextOverflow.ellipsis),
-              ],
+            title: CardTitleWeekCalendar(
+              schId: widget.schId,
             ),
             trailing: IconButton(
                 onPressed: (() {
                   setState(() {
                     isDone = true;
-                    exerciseDone(widget.schId.id);
+                    exerciseDone(widget.schId);
                   });
                 }),
                 icon: isDone
@@ -96,27 +72,18 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
           ),
         ),
         editSelect == true
-            ? SingleChildScrollView(
-                child: Card(
-                  elevation: 0,
-                  margin: const EdgeInsets.only(
-                      top: 2, left: 40, bottom: 10, right: 0),
-                  child: ListTile(
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SetsWidget(
-                          returnSet: getSets,
-                          defaultSet: defaultSet,
-                        ),
-                        for (int i = 0; i < set!.nSet; i++)
-                          RepsWidget(scheduleId: set!.scheduleId, index: i),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : const SizedBox(width: 0.0, height: 0.0),
+            ? FutureBuilder(
+                future: getSetByID(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    return SetsRepsWidget(set: snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return const Text("Error");
+                  }
+                  return const Loader();
+                })
+            : const SizedBox.shrink(),
       ],
     );
   }

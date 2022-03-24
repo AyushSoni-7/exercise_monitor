@@ -1,40 +1,35 @@
+import 'package:exercise_monitor/db/set.dart';
 import 'package:exercise_monitor/models/sets.dart';
 
-Map<String, Sets> weekSetsList = {};
+Future<Sets> getSetBySchId(int schId) async {
+  List<Map<String, dynamic>>? setList = await SetDB.queryBySchID(schId);
+  List<Reps> reps = [];
 
-Sets? updateSet(String scheduleId, int nSet) {
-  if (weekSetsList[scheduleId] != null) {
-    weekSetsList[scheduleId]!.nSet = nSet;
-  } else {
-    weekSetsList[scheduleId] = Sets(scheduleId: scheduleId, nSet: nSet);
+  if (setList == null || setList.isEmpty) {
+    return Future.value(Sets(scheduleId: schId, nSet: 0));
   }
-  return weekSetsList[scheduleId];
+  for (var repMap in setList) {
+    reps.add(Reps(weight: repMap["weight"], rep: repMap["rep"]));
+  }
+  int nSet = reps.length;
+  Sets set = Sets(scheduleId: schId, nSet: nSet);
+  set.reps = reps;
+  return set;
 }
 
-void updateReps(String scheduleId, int index, double weight, int rep) {
-  if (weekSetsList[scheduleId] != null &&
-      index < weekSetsList[scheduleId]!.reps.length) {
-    weekSetsList[scheduleId]!.reps[index].rep = rep;
-    weekSetsList[scheduleId]!.reps[index].weight = weight;
-  } else if (weekSetsList[scheduleId] != null) {
-    Reps newSet = Reps(weight: weight, rep: rep);
-    weekSetsList[scheduleId]!.reps.add(newSet);
-  } else {
-    Reps newRep = Reps(weight: weight, rep: rep);
-    weekSetsList[scheduleId]!.reps = <Reps>[
-      newRep,
-    ];
+Future addOrUpdateSet(Sets set) async {
+  await SetDB.deleteBySchID(set.scheduleId);
+  int index = 0;
+  for (Reps rep in set.reps) {
+    Map<String, dynamic> row = {
+      SetTableFields.scheduleId: set.scheduleId,
+      SetTableFields.setNum: index,
+      SetTableFields.rep: rep.rep,
+      SetTableFields.weight: rep.weight
+    };
+    await SetDB.insert(row);
+    index++;
   }
-}
-
-Sets? getSetsBySchId(String schId) {
-  return weekSetsList[schId];
-}
-
-Reps getRep(String schID, int index) {
-  Sets? set = weekSetsList[schID];
-  if (set != null && index < set.reps.length) {
-    return set.reps[index];
-  }
-  return Reps(weight: 0, rep: 0);
+  List<Map<String, dynamic>>? setList =
+      await SetDB.queryBySchID(set.scheduleId);
 }

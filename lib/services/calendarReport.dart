@@ -1,19 +1,25 @@
+import 'package:exercise_monitor/db/schedule.dart';
 import 'package:exercise_monitor/models/calendarReport.dart';
 import 'package:exercise_monitor/models/exercise.dart';
 import 'package:exercise_monitor/models/schedule.dart';
 import 'package:exercise_monitor/services/addExercise.dart';
 import 'package:exercise_monitor/services/exercise.dart';
 
-List<CalendarReport> calendarReport = [];
+Future<List<CalendarReport>> getCalendarReport(DateTime date) async {
+  int firstDayofMonth =
+      DateTime(date.year, date.month, 1).microsecondsSinceEpoch;
+  int lastDayofMonth =
+      DateTime(date.year, date.month + 1, 0).microsecondsSinceEpoch;
+  List<Map<String, dynamic>>? schExerciseMapData =
+      await SchExerciseDB.queryByDateRange(firstDayofMonth, lastDayofMonth);
+  List<ScheduleExercise> schExercise = [];
+  for (var exercise in schExerciseMapData!) {
+    schExercise.add(ScheduleExercise.fromJson(exercise));
+  }
 
-void setCalendarReport(DateTime date) {
-  DateTime firstDayofMonth = DateTime(date.year, date.month, 1);
-  List<ScheduleExercise> monthExercises = todoExercise
-      .where((element) => firstDayofMonth.isBefore(element.date))
-      .toList();
   Map<DateTime, double> dateTotal = {};
   Map<DateTime, double> doneTotal = {};
-  for (ScheduleExercise schExercise in monthExercises) {
+  for (ScheduleExercise schExercise in schExercise) {
     DateTime date = DateTime(
         schExercise.date.year, schExercise.date.month, schExercise.date.day);
     if (dateTotal.containsKey(date)) {
@@ -29,6 +35,7 @@ void setCalendarReport(DateTime date) {
       }
     }
   }
+  List<CalendarReport> calendarReport = [];
   dateTotal.forEach((date, total) {
     double done = 0.0;
     if (doneTotal.containsKey(date)) {
@@ -37,13 +44,16 @@ void setCalendarReport(DateTime date) {
     calendarReport
         .add(CalendarReport(date: date, percentageDone: (done * 100) / total));
   });
+  return Future.value(calendarReport);
 }
 
-List<CalendarExerciseReport> getExercisesReport(DateTime date) {
+Future<List<CalendarExerciseReport>> getExercisesReport(DateTime date) async {
   List<CalendarExerciseReport> calExerciseReport = [];
-  List<ScheduleExercise> schExercises = filterByDate(date);
+  List<ScheduleExercise> schExercises = await getSchExerciseByDate(date);
   for (ScheduleExercise schExercise in schExercises) {
-    Exercise exercise = getExerciseById(schExercise.exerciseId) as Exercise;
+    Exercise exercise =
+        await getExerciseById(schExercise.exerciseId) as Exercise;
+
     CalendarExerciseReport calExRepo =
         CalendarExerciseReport(exercise: exercise, schExercise: schExercise);
     calExerciseReport.add(calExRepo);

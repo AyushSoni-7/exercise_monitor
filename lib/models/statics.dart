@@ -1,12 +1,15 @@
+import 'package:exercise_monitor/models/sets.dart';
+
 class SetRepStat {
   DateTime date;
-  List<double> weight;
-  List<int> reps;
-  SetRepStat({required this.date, required this.weight, required this.reps});
+  // List<double> weight;
+  // List<int> reps;
+  List<Reps> listRep;
+  SetRepStat({required this.date, required this.listRep});
 }
 
 class IndexData {
   DateTime date;
-  double setXreps;
+  int setXreps;
   IndexData({required this.date, required this.setXreps});
 }

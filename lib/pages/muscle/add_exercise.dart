@@ -18,14 +18,18 @@ class AddExercise extends StatefulWidget {
 class _AddExerciseState extends State<AddExercise> {
   late bool isSelected;
 
+  checkIfSelected() async {
+    ScheduleExercise? schExercise = await getSchExerciseByDateExerID(
+        widget.exercise.id, widget.date ?? DateTime.now());
+    isSelected = schExercise != null ? true : false;
+    return Future.value(isSelected);
+  }
+
   @override
   void initState() {
     // if (widget.date != null && widget.date.runtimeType == DateTime)
+    checkIfSelected();
     super.initState();
-    isSelected =
-        getExercise(widget.exercise.id, widget.date ?? DateTime.now()) != null
-            ? true
-            : false;
   }
 
   @override
@@ -38,31 +42,47 @@ class _AddExerciseState extends State<AddExercise> {
           backgroundImage: AssetImage(exercise.imgSrc.toString()),
         ),
         title: Text(exercise.name.toString()),
-        trailing: isSelected
-            ? const Icon(CupertinoIcons.check_mark_circled_solid)
-            : FloatingActionButton(
-                mini: true,
-                elevation: 0.8,
-                heroTag: Text(exercise.id.toString()),
-                onPressed: () {
-                  setState(() {
-                    isSelected = true;
-                  });
+        trailing: FutureBuilder(
+            future: checkIfSelected(),
+            builder:
+                (BuildContext buildContext, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Icon(CupertinoIcons.check_mark_circled_solid);
+              } else if (snapshot.hasError) {
+                return const Icon(CupertinoIcons.check_mark_circled_solid);
+              }
+              return isSelected
+                  ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                  : FloatingActionButton(
+                      mini: true,
+                      elevation: 0.8,
+                      heroTag: Text(exercise.id.toString()),
+                      onPressed: () {
+                        setState(() {
+                          isSelected = true;
+                        });
 
-                  if (widget.date != null &&
-                      widget.date.runtimeType == DateTime) {
-                    ScheduleExercise schExercise = objSchExercise(
-                      exercise.id,
-                      widget.date ?? DateTime.now(),
+                        if (widget.date != null &&
+                            widget.date.runtimeType == DateTime &&
+                            exercise.id != null) {
+                          addSchExercise({
+                            ScheduleExerciseFields.date: DateTime(
+                                    widget.date!.year,
+                                    widget.date!.month,
+                                    widget.date!.day)
+                                .microsecondsSinceEpoch,
+                            ScheduleExerciseFields.exerciseId:
+                                widget.exercise.id,
+                            ScheduleExerciseFields.done: 0
+                          });
+                        }
+                      },
+                      child: const Icon(CupertinoIcons.add_circled_solid
+                          // color: Color.fromARGB(255, 51, 49, 49),
+                          ),
+                      tooltip: "Add Exercise",
                     );
-                    addExercise(schExercise);
-                  }
-                },
-                child: const Icon(CupertinoIcons.add_circled_solid
-                    // color: Color.fromARGB(255, 51, 49, 49),
-                    ),
-                tooltip: "Add Exercise",
-              ),
+            }),
       ),
     );
   }
