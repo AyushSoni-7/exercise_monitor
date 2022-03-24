@@ -62,6 +62,9 @@ Future<List<ScheduleExercise>> getSchExerciseByDate(DateTime date) async {
       DateTime(date.year, date.month, date.day).microsecondsSinceEpoch;
   List<Map<String, dynamic>>? schExerciseJson =
       await SchExerciseDB.queryByDate(filterDate);
+  // if (schExerciseJson == null || schExerciseJson.isEmpty) {
+  //   return Future.value(null);
+  // }
   List<ScheduleExercise> schExercise = [];
   for (var exercise in schExerciseJson!) {
     schExercise.add(ScheduleExercise.fromJson(exercise));

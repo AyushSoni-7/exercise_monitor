@@ -21,7 +21,7 @@ class CalendarWidget extends StatefulWidget {
 }
 
 class _CalendarWidgetState extends State<CalendarWidget> {
-  List<ScheduleExercise> todoExercise = [];
+  late List<ScheduleExercise> todoExercise;
   @override
   void initState() {
     getToDoExercise(DateTime.now());
@@ -29,13 +29,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     super.initState();
   }
 
-  Future<List<ScheduleExercise>> getToDoExercise(DateTime date) async {
-    return getSchExerciseByDate(DateTime.now())
+  getToDoExercise(DateTime date) async {
+    Future.delayed(Duration(seconds: 2));
+    return await getSchExerciseByDate(date)
         .then((value) => todoExercise = value);
   }
 
   DateTime _selectedDate = DateTime.now();
-  // List<ScheduleExercise> todoExercise = getSchExerciseByDate(DateTime.now());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,33 +45,27 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           _addExerciseBar(),
           _addDatebar(),
-          todoExercise.isNotEmpty
-              ? FutureBuilder(
-                  future: getToDoExercise(_selectedDate),
-                  builder: (BuildContext context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: todoExercise.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
-                              child: ToDoExerciseListWidget(
-                                  schId: todoExercise[index]),
-                            );
-                          });
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
-                    return const Loader();
-                  })
-              : Center(
-                  child: Text(
-                  "No Data Found",
-                  style: subHeadingStyle,
-                )),
+          FutureBuilder(
+              future: getToDoExercise(_selectedDate),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: todoExercise.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+                          child: ToDoExerciseListWidget(
+                              schId: todoExercise[index]),
+                        );
+                      });
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                return const Loader();
+              }),
         ]),
       ),
     );
@@ -101,11 +95,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               fontSize: 14, fontWeight: FontWeight.w600, color: Colors.grey),
         ),
         onDateChange: (date) {
-          _selectedDate = date;
           setState(() {
-            todoExercise.clear;
+            _selectedDate = date;
             getToDoExercise(_selectedDate);
-            // todoExercise = getSchExerciseByDate(_selectedDate);
           });
         },
       ),
@@ -141,9 +133,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                                   date: _selectedDate,
                                 ))),
                     setState(() {
-                      todoExercise.clear;
                       getToDoExercise(_selectedDate);
-                      // todoExercise = getSchExerciseByDate(_selectedDate);
                     })
                   }),
         ],
