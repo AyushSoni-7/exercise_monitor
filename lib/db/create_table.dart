@@ -10,7 +10,7 @@ Future createTable(Database db, int version) async {
   const _textType = "TEXT NOT NULL";
   // const _boolType = "BOOLEAN NOT NULL";
   const _intType = "INTEGER NOT NULL";
-  const _doubleType = "NUMERIC NOT NULL";
+  const _doubleType = "REAL NOT NULL";
   // Muscle table
   await db.execute('''
       CREATE TABLE $muscleTable (
@@ -39,7 +39,7 @@ Future createTable(Database db, int version) async {
         ${ScheduleExerciseFields.done} $_intType
       )
       ''');
-
+  // ${SetTableFields.weight} $_doubleType
   // Sets Reps
   db.execute('''
       CREATE TABLE $setTable (
@@ -47,7 +47,8 @@ Future createTable(Database db, int version) async {
         ${SetTableFields.scheduleId} $_intType,
         ${SetTableFields.setNum} $_intType,
         ${SetTableFields.rep} $_intType,
-        ${SetTableFields.weight} $_doubleType
+        ${SetTableFields.weight} $_intType
+        
       )
       ''');
 

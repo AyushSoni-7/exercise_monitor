@@ -1,48 +1,35 @@
+import 'package:exercise_monitor/db/set.dart';
 import 'package:exercise_monitor/models/sets.dart';
-import 'dart:math';
-import 'dart:convert';
 
-Map<int, Sets> weekSetsList = {};
+Future<Sets> getSetBySchId(int schId) async {
+  List<Map<String, dynamic>>? setList = await SetDB.queryBySchID(schId);
+  List<Reps> reps = [];
 
-int getRandInt(int len) {
-  Random random = new Random();
-  return random.nextInt(10000);
-}
-
-Sets? updateSet(int scheduleId, int nSet) {
-  if (weekSetsList[scheduleId] != null) {
-    weekSetsList[scheduleId]!.nSet = nSet;
-  } else {
-    weekSetsList[scheduleId] =
-        Sets(id: getRandInt(5), scheduleId: scheduleId, nSet: nSet);
+  if (setList == null || setList.isEmpty) {
+    return Future.value(Sets(scheduleId: schId, nSet: 0));
   }
-  return weekSetsList[scheduleId];
-}
-
-void updateReps(int scheduleId, int index, double weight, int rep) {
-  if (weekSetsList[scheduleId] != null &&
-      index < weekSetsList[scheduleId]!.reps.length) {
-    weekSetsList[scheduleId]!.reps[index].rep = rep;
-    weekSetsList[scheduleId]!.reps[index].weight = weight;
-  } else if (weekSetsList[scheduleId] != null) {
-    Reps newSet = Reps(weight: weight, rep: rep);
-    weekSetsList[scheduleId]!.reps.add(newSet);
-  } else {
-    Reps newRep = Reps(weight: weight, rep: rep);
-    weekSetsList[scheduleId]!.reps = <Reps>[
-      newRep,
-    ];
+  for (var repMap in setList) {
+    reps.add(Reps(weight: repMap["weight"], rep: repMap["weight"]));
   }
+  int nSet = reps.length;
+  Sets set = Sets(scheduleId: schId, nSet: nSet);
+  set.reps = reps;
+  return set;
 }
 
-Sets? getSetsBySchId(int schId) {
-  return weekSetsList[schId];
-}
-
-Reps getRep(int schID, int index) {
-  Sets? set = weekSetsList[schID];
-  if (set != null && index < set.reps.length) {
-    return set.reps[index];
+Future addOrUpdateSet(Sets set) async {
+  await SetDB.deleteBySchID(set.scheduleId);
+  int index = 0;
+  for (Reps rep in set.reps) {
+    Map<String, dynamic> row = {
+      SetTableFields.scheduleId: set.scheduleId,
+      SetTableFields.setNum: index,
+      SetTableFields.rep: rep.rep,
+      SetTableFields.weight: rep.weight
+    };
+    await SetDB.insert(row);
+    index++;
   }
-  return Reps(weight: 0, rep: 0);
+  List<Map<String, dynamic>>? setList =
+      await SetDB.queryBySchID(set.scheduleId);
 }

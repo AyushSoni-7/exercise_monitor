@@ -1,6 +1,5 @@
 import 'package:exercise_monitor/models/sets.dart';
-import 'package:exercise_monitor/pages/exercise/reps.dart';
-import 'package:exercise_monitor/pages/exercise/sets.dart';
+
 import 'package:exercise_monitor/pages/exercise/sets_reps.dart';
 import 'package:exercise_monitor/pages/utility/loader.dart';
 import 'package:exercise_monitor/pages/week_calendar/card_title.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 
 import '../../models/exercise.dart';
 import '../../models/schedule.dart';
-import '../../services/exercise.dart';
 
 class ToDoExerciseListWidget extends StatefulWidget {
   final ScheduleExercise schId;
@@ -26,33 +24,21 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
   late Exercise? exercise;
   bool isDone = false;
   bool editSelect = false;
-  int defaultSet = 0;
-  // late int nset;
-  late Sets? set;
+  late Sets set;
 
   @override
   void initState() {
     super.initState();
     isDone = widget.schId.done;
-    set = getSetsBySchId(widget.schId.id) ??
-        updateSet(widget.schId.id, defaultSet);
-    defaultSet = set!.nSet;
   }
 
-  void getSets(int value) {
-    setState(() {
-      set = updateSet(widget.schId.id, value);
-    });
-    defaultSet = set!.nSet;
+  getSetByID() async {
+    return await getSetBySchId(widget.schId.id).then((value) => set = value);
   }
 
   @override
   Widget build(BuildContext context) {
     isDone = widget.schId.done;
-    set = getSetsBySchId(widget.schId.id) ??
-        updateSet(widget.schId.id, defaultSet);
-    defaultSet = set!.nSet;
-    // ends here
     return Column(
       children: [
         Card(
@@ -86,27 +72,17 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
           ),
         ),
         editSelect == true
-            ? SetsRepsWidget(schId: widget.schId)
-            // SingleChildScrollView(
-            //     child: Card(
-            //       elevation: 0,
-            //       margin: const EdgeInsets.only(
-            //           top: 2, left: 40, bottom: 10, right: 0),
-            //       child: ListTile(
-            //         title: Column(
-            //           crossAxisAlignment: CrossAxisAlignment.stretch,
-            //           children: [
-            //             SetsWidget(
-            //               returnSet: getSets,
-            //               defaultSet: defaultSet,
-            //             ),
-            //             for (int i = 0; i < set!.nSet; i++)
-            //               RepsWidget(scheduleId: set!.scheduleId, index: i),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   )
+            ? FutureBuilder(
+                future: getSetByID(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    return SetsRepsWidget(set: snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return const Text("Error");
+                  }
+                  return const Loader();
+                })
             : const SizedBox.shrink(),
       ],
     );

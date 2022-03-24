@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:exercise_monitor/models/exercise.dart';
 import 'package:exercise_monitor/models/schedule.dart';
 import 'package:exercise_monitor/models/sets.dart';
@@ -7,45 +9,48 @@ import 'package:exercise_monitor/services/sets.dart';
 import 'package:flutter/material.dart';
 
 class SetsRepsWidget extends StatefulWidget {
-  final ScheduleExercise schId;
-  const SetsRepsWidget({Key? key, required this.schId}) : super(key: key);
+  final Sets set;
+  const SetsRepsWidget({Key? key, required this.set}) : super(key: key);
 
   @override
   State<SetsRepsWidget> createState() => _SetsRepsWidgetState();
 }
 
 class _SetsRepsWidgetState extends State<SetsRepsWidget> {
-  int defaultSet = 0;
   late int nset;
 
-  late Sets? set;
+  late Sets set;
 
   @override
   void initState() {
+    set = widget.set;
     super.initState();
-    nset = defaultSet;
   }
 
   @override
   void dispose() {
-    // Push your sets here
+    addOrUpdateSet(set);
     super.dispose();
   }
 
-  void getSets(int value) {
+  getSets(int value) {
     setState(() {
-      nset = value;
+      if (value > 0) {
+        set.reps.add(Reps(weight: 0, rep: 0));
+      } else {
+        set.reps.removeLast();
+      }
+      set.nSet = set.reps.length;
     });
-    set = getSetsBySchId(widget.schId.id) ??
-        updateSet(widget.schId.id, defaultSet);
-    defaultSet = set!.nSet;
+  }
+
+  getReps(Reps rep, int index) {
+    set.reps.elementAt(index).rep = rep.rep;
+    set.reps.elementAt(index).weight = rep.weight;
   }
 
   @override
   Widget build(BuildContext context) {
-    set = getSetsBySchId(widget.schId.id) ??
-        updateSet(widget.schId.id, defaultSet);
-    defaultSet = set!.nSet;
     return SingleChildScrollView(
       child: Card(
         elevation: 0,
@@ -56,10 +61,10 @@ class _SetsRepsWidgetState extends State<SetsRepsWidget> {
             children: [
               SetsWidget(
                 returnSet: getSets,
-                defaultSet: defaultSet,
+                defaultSet: set.reps.length,
               ),
-              for (int i = 0; i < nset; i++)
-                RepsWidget(scheduleId: set!.scheduleId, index: i),
+              for (int i = 0; i < set.reps.length; i++)
+                RepsWidget(set: set, index: i, returnRep: getReps),
             ],
           ),
         ),

@@ -50,10 +50,8 @@ class _SetsWidgetState extends State<SetsWidget> {
               child: const Icon(CupertinoIcons.add, color: Colors.black87),
               backgroundColor: Colors.white,
               onPressed: () {
-                setState(() {
-                  nset++;
-                });
-                widget.returnSet(nset);
+                widget.returnSet(1);
+                setState(() {});
               },
             ),
           ),
@@ -61,14 +59,14 @@ class _SetsWidgetState extends State<SetsWidget> {
             width: MediaQuery.of(context).size.width * 0.02,
           ),
           Text(
-            nset.toString(),
+            widget.defaultSet.toString(),
             style: sub2HeadingStyle,
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.02,
           ),
           Visibility(
-            visible: nset > 0 ? true : false,
+            visible: widget.defaultSet > 0 ? true : false,
             child: SizedBox(
               height: MediaQuery.of(context).size.width * 0.08,
               width: MediaQuery.of(context).size.width * 0.08,
@@ -77,10 +75,8 @@ class _SetsWidgetState extends State<SetsWidget> {
                   heroTag: null,
                   mini: true,
                   onPressed: () {
-                    setState(() {
-                      nset--;
-                    });
-                    widget.returnSet(nset);
+                    widget.returnSet(-1);
+                    setState(() {});
                   },
                   child:
                       const Icon(CupertinoIcons.minus, color: Colors.black87),

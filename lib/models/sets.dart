@@ -1,23 +1,18 @@
 const String setTable = "setTable";
 
 class Sets {
-  int id;
   int scheduleId;
   int nSet;
   List<Reps> reps = [];
-  Sets({required this.id, required this.scheduleId, required this.nSet, reps});
+  Sets({required this.scheduleId, required this.nSet, reps});
 
   factory Sets.fromJson(Map<String, dynamic> json) {
     return Sets(
-        id: json["_id"],
-        scheduleId: json["scheduleId"],
-        nSet: json["nSet"],
-        reps: json["reps"]);
+        scheduleId: json["scheduleId"], nSet: json["nSet"], reps: json["reps"]);
   }
 
   Map<String, dynamic> toJson(int index) {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["_id"] = id;
     data["scheduleId"] = scheduleId;
     data["nSet"] = nSet;
     data["reps"] = reps;
@@ -25,8 +20,9 @@ class Sets {
   }
 }
 
+// ${SetTableFields.weight} $_doubleType
 class Reps {
-  double weight;
+  int weight;
   int rep;
   Reps({required this.weight, required this.rep});
 
