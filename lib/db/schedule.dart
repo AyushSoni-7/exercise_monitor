@@ -10,6 +10,14 @@ mixin SchExerciseDB implements GymDB {
     return await db?.query(_tableName);
   }
 
+  static Future<List<Map<String, dynamic>>?> queryByExerciseID(
+      int exerciseID) async {
+    Database? db = await GymDB.instance.database;
+    return await db?.query(_tableName,
+        where: '${ScheduleExerciseFields.exerciseId} = ?',
+        whereArgs: [exerciseID]);
+  }
+
   static Future<List<Map<String, dynamic>>?> queryByDate(int date) async {
     Database? db = await GymDB.instance.database;
     return await db?.query(_tableName,
@@ -26,6 +34,15 @@ mixin SchExerciseDB implements GymDB {
         limit: 1);
   }
 
+  static Future<List<Map<String, dynamic>>?> queryByDateRange(
+      int firstDay, int lastDay) async {
+    Database? db = await GymDB.instance.database;
+    return await db?.query(_tableName,
+        where:
+            '${ScheduleExerciseFields.date} >= ? and ${ScheduleExerciseFields.date} <= ?',
+        whereArgs: [firstDay, lastDay]);
+  }
+
   static Future<int?> insert(Map<String, dynamic> row) async {
     Database? db = await GymDB.instance.database;
     return await db?.insert(_tableName, row);
@@ -35,12 +52,12 @@ mixin SchExerciseDB implements GymDB {
     Database? db = await GymDB.instance.database;
     int id = row["_id"];
     return await db?.update(_tableName, row,
-        where: '$ScheduleExerciseFields.id: ?', whereArgs: [id]);
+        where: '${ScheduleExerciseFields.id} = ?', whereArgs: [id]);
   }
 
   static Future<int?> delete(int id) async {
     Database? db = await GymDB.instance.database;
     return await db?.delete(_tableName,
-        where: '$ScheduleExerciseFields.id: ?', whereArgs: [id]);
+        where: '${ScheduleExerciseFields.id}: ?', whereArgs: [id]);
   }
 }

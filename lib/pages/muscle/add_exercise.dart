@@ -1,4 +1,3 @@
-import 'package:exercise_monitor/pages/utility/loader.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

@@ -1,7 +1,3 @@
-import 'dart:math';
-
-import 'package:exercise_monitor/models/exercise.dart';
-import 'package:exercise_monitor/models/schedule.dart';
 import 'package:exercise_monitor/models/sets.dart';
 import 'package:exercise_monitor/pages/exercise/reps.dart';
 import 'package:exercise_monitor/pages/exercise/sets.dart';

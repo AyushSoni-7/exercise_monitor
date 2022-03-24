@@ -1,6 +1,3 @@
-import 'dart:math';
-import 'dart:convert';
-import 'package:collection/collection.dart';
 import 'package:exercise_monitor/db/schedule.dart';
 import '../models/schedule.dart';
 
@@ -87,8 +84,8 @@ Future<ScheduleExercise?> getSchExerciseByDateExerID(
   return Future.value(schExercise);
 }
 
-void exerciseDone(int id) {
-  ScheduleExercise schExercise =
-      todoExercise.firstWhere((element) => element.id == id);
-  schExercise.done = true;
+Future<int?> exerciseDone(ScheduleExercise schId) {
+  Map<String, dynamic> data = schId.toJson();
+  data[ScheduleExerciseFields.done] = 1;
+  return SchExerciseDB.update(data);
 }

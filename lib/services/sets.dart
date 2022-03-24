@@ -9,7 +9,7 @@ Future<Sets> getSetBySchId(int schId) async {
     return Future.value(Sets(scheduleId: schId, nSet: 0));
   }
   for (var repMap in setList) {
-    reps.add(Reps(weight: repMap["weight"], rep: repMap["weight"]));
+    reps.add(Reps(weight: repMap["weight"], rep: repMap["rep"]));
   }
   int nSet = reps.length;
   Sets set = Sets(scheduleId: schId, nSet: nSet);

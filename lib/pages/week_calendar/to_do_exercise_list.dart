@@ -60,7 +60,7 @@ class _ToDoExerciseListWidgetState extends State<ToDoExerciseListWidget> {
                 onPressed: (() {
                   setState(() {
                     isDone = true;
-                    exerciseDone(widget.schId.id);
+                    exerciseDone(widget.schId);
                   });
                 }),
                 icon: isDone
