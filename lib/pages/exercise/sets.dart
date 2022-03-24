@@ -26,7 +26,7 @@ class _SetsWidgetState extends State<SetsWidget> {
     return SizedBox(
       height: MediaQuery.of(context).size.width * 0.15,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           // Image.asset("asSetsWidget/flutter.png", width: 100),
           // SizedBox(
@@ -34,11 +34,11 @@ class _SetsWidgetState extends State<SetsWidget> {
           // ),
 
           Text(
-            "Sets",
+            "Number of Sets",
             style: sub2HeadingStyle,
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: MediaQuery.of(context).size.width * 0.15,
           ),
           SizedBox(
             height: MediaQuery.of(context).size.width * 0.07,
