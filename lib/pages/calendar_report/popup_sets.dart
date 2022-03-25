@@ -22,8 +22,7 @@ class SetCard extends StatelessWidget {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(32.0, 32.0, 32.0, 32.0),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.42,
+                child: SingleChildScrollView(
                   child: Card(
                     elevation: 0,
                     child: ListTile(
