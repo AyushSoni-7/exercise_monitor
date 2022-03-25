@@ -21,36 +21,38 @@ class SetCard extends StatelessWidget {
           if (snapshot.hasData) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(32.0, 32.0, 32.0, 32.0),
+                padding: const EdgeInsets.fromLTRB(48.0, 32.0, 48.0, 32.0),
                 child: SingleChildScrollView(
+                  // padding: const EdgeInsets.all(0),
                   child: Card(
                     elevation: 0,
-                    child: ListTile(
-                      title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Center(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            color: darkHeaderColor,
+                            child: Center(
                               child: Text(
                                 "Sets",
                                 style: subHeadingStyle,
                               ),
                             ),
-                            Center(
-                              child: Text(
-                                "Number of Sets " + set.nSet.toString(),
-                                style: sub2HeadingStyle,
-                              ),
+                          ),
+                          Center(
+                            child: Text(
+                              "Number of Sets " + set.nSet.toString(),
+                              style: sub2HeadingStyle,
                             ),
-                            for (int i = 0; i < set.reps.length; i++)
-                              Row(
-                                children: [
-                                  Text(set.reps[i].weight.toString()),
-                                  const Text("X"),
-                                  Text(set.reps[i].rep.toString())
-                                ],
-                              ),
-                          ]),
-                    ),
+                          ),
+                          for (int i = 0; i < set.reps.length; i++)
+                            Row(
+                              children: [
+                                Text(set.reps[i].weight.toString()),
+                                const Text("X"),
+                                Text(set.reps[i].rep.toString())
+                              ],
+                            ),
+                        ]),
                   ),
                 ),
               ),
