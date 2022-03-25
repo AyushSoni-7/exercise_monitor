@@ -41,7 +41,11 @@ class _RepsWidgetState extends State<RepsWidget> {
       child: Row(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.30,
+            width: MediaQuery.of(context).size.width * 0.05,
+          ),
+          Text("Set " + (widget.index + 1).toString()),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.05,
           ),
           Flexible(
             child: TextField(
@@ -80,7 +84,6 @@ class _RepsWidgetState extends State<RepsWidget> {
                 setState(
                   () => {},
                 ),
-                // widget.weights = double.parse(value)
               },
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -93,7 +96,10 @@ class _RepsWidgetState extends State<RepsWidget> {
               ),
               keyboardType: TextInputType.number,
             ),
-          )
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.05,
+          ),
         ],
       ),
     );

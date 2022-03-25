@@ -1,6 +1,8 @@
 import 'package:exercise_monitor/models/calendarReport.dart';
+import 'package:exercise_monitor/pages/calendar_report/popup_sets.dart';
 import 'package:exercise_monitor/pages/utility/app_bar.dart';
 import 'package:exercise_monitor/pages/utility/drawer_page.dart';
+import 'package:exercise_monitor/pages/utility/hero_dialog_route.dart';
 import 'package:exercise_monitor/pages/utility/loader.dart';
 import 'package:exercise_monitor/services/addExercise.dart';
 import 'package:exercise_monitor/services/calendarReport.dart';
@@ -157,40 +159,52 @@ class _CalendarReportWidgetState extends State<CalendarReportWidget> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: calExerciseReport!.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  child: ListTile(
-                                    leading: calExerciseReport![index]
-                                            .schExercise
-                                            .done
-                                        ? const Icon(
-                                            CupertinoIcons
-                                                .check_mark_circled_solid,
-                                            color: Colors.green,
-                                          )
-                                        : const Icon(
-                                            CupertinoIcons.clear_circled_solid,
-                                            color: Colors.red,
+                                return InkWell(
+                                  onTap: (() {
+                                    Navigator.of(context).push(
+                                        HeroDialogRoute(builder: (context) {
+                                      return SetCard(
+                                          scheduleID: calExerciseReport![index]
+                                              .schExercise
+                                              .id);
+                                    }));
+                                  }),
+                                  child: Card(
+                                    child: ListTile(
+                                      leading: calExerciseReport![index]
+                                              .schExercise
+                                              .done
+                                          ? const Icon(
+                                              CupertinoIcons
+                                                  .check_mark_circled_solid,
+                                              color: Colors.green,
+                                            )
+                                          : const Icon(
+                                              CupertinoIcons
+                                                  .clear_circled_solid,
+                                              color: Colors.red,
+                                            ),
+                                      title: Row(
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            backgroundImage: AssetImage(
+                                                calExerciseReport![index]
+                                                    .exercise
+                                                    .imgSrc
+                                                    .toString()),
                                           ),
-                                    title: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          backgroundImage: AssetImage(
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
                                               calExerciseReport![index]
                                                   .exercise
-                                                  .imgSrc
-                                                  .toString()),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Text(
-                                            calExerciseReport![index]
-                                                .exercise
-                                                .name
-                                                .toString(),
-                                            overflow: TextOverflow.ellipsis),
-                                      ],
+                                                  .name
+                                                  .toString(),
+                                              overflow: TextOverflow.ellipsis),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

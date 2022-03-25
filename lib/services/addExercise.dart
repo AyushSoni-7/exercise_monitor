@@ -32,8 +32,10 @@ Future<ScheduleExercise?> getSchExerciseByDateExerID(
   return Future.value(schExercise);
 }
 
-Future<int?> exerciseDone(ScheduleExercise schId) {
-  Map<String, dynamic> data = schId.toJson();
+Future<int?> exerciseDone(int schId) async {
+  List<Map<String, dynamic>>? schDataList =
+      await SchExerciseDB.queryBySchID(schId);
+  Map<String, dynamic> data = Map.from(schDataList!.elementAt(0));
   data[ScheduleExerciseFields.done] = 1;
   return SchExerciseDB.update(data);
 }

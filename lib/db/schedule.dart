@@ -10,6 +10,14 @@ mixin SchExerciseDB implements GymDB {
     return await db?.query(_tableName);
   }
 
+  static Future<List<Map<String, dynamic>>?> queryBySchID(int schID) async {
+    Database? db = await GymDB.instance.database;
+    return await db?.query(_tableName,
+        where: '${ScheduleExerciseFields.id} = ?',
+        whereArgs: [schID],
+        limit: 1);
+  }
+
   static Future<List<Map<String, dynamic>>?> queryByExerciseID(
       int exerciseID) async {
     Database? db = await GymDB.instance.database;
