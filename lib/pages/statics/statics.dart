@@ -1,13 +1,13 @@
 import 'package:exercise_monitor/models/statics.dart';
-import 'package:exercise_monitor/pages/utility/app_bar.dart';
-import 'package:exercise_monitor/pages/utility/drawer_page.dart';
 import 'package:exercise_monitor/pages/utility/loader.dart';
 import 'package:exercise_monitor/services/statics.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class StaticsHomeWidget extends StatefulWidget {
-  const StaticsHomeWidget({Key? key}) : super(key: key);
+  final int exerciseID;
+  const StaticsHomeWidget({Key? key, required this.exerciseID})
+      : super(key: key);
 
   @override
   _StaticsHomeWidgetState createState() => _StaticsHomeWidgetState();
@@ -29,10 +29,11 @@ class _StaticsHomeWidgetState extends State<StaticsHomeWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(),
-      drawer: const DrawerMenu(),
+      // appBar: customAppBar(),
+      // drawer: const DrawerMenu(),
+      appBar: AppBar(),
       body: FutureBuilder(
-        future: getsStaticsData(1),
+        future: getsStaticsData(widget.exerciseID),
         builder: (BuildContext buildContext, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData) {
             return SfCartesianChart(
