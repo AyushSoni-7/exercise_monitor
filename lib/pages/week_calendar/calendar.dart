@@ -6,7 +6,9 @@ import 'package:exercise_monitor/pages/utility/loader.dart';
 import 'package:exercise_monitor/pages/week_calendar/click_button.dart';
 import 'package:exercise_monitor/pages/week_calendar/to_do_exercise_list.dart';
 import 'package:exercise_monitor/themes/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -29,6 +31,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     super.initState();
   }
 
+  var isDialOpen = ValueNotifier(false);
+
   getToDoExercise(DateTime date) async {
     return await getSchExerciseByDate(date)
         .then((value) => todoExercise = value);
@@ -37,35 +41,63 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime _selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(),
-      drawer: const DrawerMenu(),
-      body: SingleChildScrollView(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          _addExerciseBar(),
-          _addDatebar(),
-          FutureBuilder(
-              future: getToDoExercise(_selectedDate),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: todoExercise.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
-                          child: ToDoExerciseListWidget(
-                              schId: todoExercise[index]),
-                        );
-                      });
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-                return const Loader();
-              }),
-        ]),
+    return WillPopScope(
+      onWillPop: () async {
+        if (isDialOpen.value) {
+          isDialOpen.value = false;
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: customAppBar(),
+        drawer: const DrawerMenu(),
+        body: SingleChildScrollView(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            _addExerciseBar(),
+            _addDatebar(),
+            FutureBuilder(
+                future: getToDoExercise(_selectedDate),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: todoExercise.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 5.0, 0, 0),
+                            child: ToDoExerciseListWidget(
+                                schId: todoExercise[index]),
+                          );
+                        });
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  return const Loader();
+                }),
+          ]),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          overlayOpacity: 0.3,
+          spacing: 14,
+          spaceBetweenChildren: 14,
+          openCloseDial: isDialOpen,
+          children: [
+            SpeedDialChild(
+                child: const Icon(Icons.sports_gymnastics),
+                label: 'Exercise',
+                onTap: () {}),
+            SpeedDialChild(
+                child: const Icon(Icons.sports_martial_arts),
+                label: 'Muscle',
+                onTap: () {}),
+          ],
+        ),
       ),
     );
   }
